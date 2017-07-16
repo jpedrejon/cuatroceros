@@ -5,7 +5,12 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
+const session       = require("express-session");
+const bcrypt        = require("bcrypt");
+const passport      = require("passport");
+const LocalStrategy = require("passport-local").Strategy;
 const dbURL = require('./config/db').dbURL;
+const flash = require("connect-flash");
 
 var index = require('./routes/index');
 var auth = require('./routes/auth');
@@ -19,6 +24,19 @@ var app = express();
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
+
+app.use(flash());
+
+app.use(session({
+  secret: "our-passport-local-strategy-app",
+  resave: true,
+  saveUninitialized: true
+}));
+
+require('./passport/local');
+
+app.use(passport.initialize());
+app.use(passport.session());
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));

@@ -1,6 +1,8 @@
 // routes/auth-routes.js
 const express    = require("express");
 const authRoutes = express.Router();
+const ensureLogin = require("connect-ensure-login");
+const passport      = require("passport");
 
 // User model
 const User       = require("../models/User");
@@ -44,6 +46,25 @@ authRoutes.post("/", (req, res, next) => {
       }
     });
   });
+});
+
+
+authRoutes.get("/login", (req, res, next) => {
+  res.render("auth/login",{
+    message: req.flash("error")
+  });
+});
+
+
+authRoutes.post("/login", passport.authenticate("local", {
+  successRedirect: "/",
+  failureRedirect: "/auth/login",
+  passReqToCallback: true,
+  failureFlash: true
+}));
+
+authRoutes.get("/private-page", ensureLogin.ensureLoggedIn(), (req, res) => {
+  res.render("private", { user: req.user });
 });
 
 module.exports = authRoutes;
