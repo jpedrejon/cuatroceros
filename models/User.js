@@ -12,7 +12,8 @@ const userSchema = new Schema({
   address: String,
   location: Object,
   role: String,
-  accessToken: String
+  accessToken: String,
+  facebookID: String
 }, {
   timestamps: { createdAt: "created_at", updatedAt: "updated_at" }
 });

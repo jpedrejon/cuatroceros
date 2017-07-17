@@ -11,6 +11,7 @@ const passport      = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
 const dbURL = require('./config/db').dbURL;
 const flash = require("connect-flash");
+const FbStrategy = require('passport-facebook').Strategy;
 
 var index = require('./routes/index');
 var auth = require('./routes/auth');
@@ -46,8 +47,8 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', index);
 app.use('/auth', auth);
+app.use('/', index);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
